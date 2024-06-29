@@ -33,6 +33,7 @@ export class BoardService {
         ...updateBoardDto,
         status: stat,
       },
+      { new: true },
     );
   }
 

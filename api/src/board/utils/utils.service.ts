@@ -10,15 +10,12 @@ export const checkStatus = (game: Board, symbol: string): status => {
 
   //check rows
   let tictactoe: boolean;
-  currentBoard.map((line) => {
-    tictactoe =
-      tictactoe ||
-      (line[0] === symbol && line[1] === symbol && line[2] === symbol);
-  });
-  //check columns
   currentBoard.map((line, index) => {
     tictactoe =
       tictactoe ||
+      //check rows
+      (line[0] === symbol && line[1] === symbol && line[2] === symbol) ||
+      //check columns
       (currentBoard[0][index] === symbol &&
         currentBoard[1][index] === symbol &&
         currentBoard[2][index] === symbol);
@@ -34,10 +31,21 @@ export const checkStatus = (game: Board, symbol: string): status => {
       currentBoard[1][1] === symbol &&
       currentBoard[2][0] === symbol);
 
+  //check if there is moves left
+  const boxesLeft = currentBoard.reduce((res, line) => {
+    const prev = line.reduce((res, el) => {
+      return el === '' ? res + 1 : res;
+    }, 0);
+    return res + prev;
+  }, 0);
+
   if (tictactoe) {
     symbol === player1.symbol
       ? (stat = 'player1_wins')
       : (stat = 'player1_wins');
+  }
+  if (boxesLeft === 0) {
+    stat = 'draw';
   }
 
   return stat;
