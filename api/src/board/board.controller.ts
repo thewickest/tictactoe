@@ -25,4 +25,9 @@ export class BoardController {
   async findCurrentBoard(): Promise<Board> {
     return await this.boardService.findCurrentBoard();
   }
+
+  @Get(':id')
+  async findNextBoard(@Param('id') id: string): Promise<Board> {
+    return await this.boardService.generateNextBoard(id);
+  }
 }
