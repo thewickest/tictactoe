@@ -1,24 +1,28 @@
-import { Body, Controller, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
+import { Board } from './schema/board.schema';
 
 @Controller('board')
 export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
   @Post()
-  create(@Body() createBoardDto: CreateBoardDto) {
+  async create(@Body() createBoardDto: CreateBoardDto): Promise<Board> {
     return this.boardService.create(createBoardDto);
   }
 
-  @Put()
-  update(@Body() updateBoardDto: UpdateBoardDto) {
-    return this.boardService.update(updateBoardDto);
+  @Patch(':id')
+  async patch(
+    @Param('id') id: string,
+    @Body() updateBoardDto: UpdateBoardDto,
+  ): Promise<Board> {
+    return await this.boardService.patch(id, updateBoardDto);
   }
 
   @Get()
-  find() {
-    return this.boardService.find();
+  async findCurrentBoard(): Promise<Board> {
+    return await this.boardService.findCurrentBoard();
   }
 }

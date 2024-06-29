@@ -9,15 +9,20 @@ import { InjectModel } from '@nestjs/mongoose';
 export class BoardService {
   constructor(@InjectModel(Board.name) private boardModel: Model<Board>) {}
 
-  create(createBoardDto: CreateBoardDto) {
-    return 'This action adds a new board';
+  async create(createBoardDto: CreateBoardDto): Promise<Board> {
+    const createdBoard = new this.boardModel({
+      ...createBoardDto,
+      createdAt: new Date(),
+      updateAt: new Date(),
+    });
+    return createdBoard.save();
   }
 
-  update(updateBoardDto: UpdateBoardDto) {
-    return `This action updates a board`;
+  async patch(id: string, updateBoardDto: UpdateBoardDto): Promise<Board> {
+    return await this.boardModel.findOneAndUpdate({ _id: id }, updateBoardDto);
   }
 
-  find(): Promise<Board[]> {
-    return this.boardModel.find().exec();
+  async findCurrentBoard(): Promise<Board> {
+    return (await this.boardModel.find().sort({ createdAt: -1 }))[0];
   }
 }
