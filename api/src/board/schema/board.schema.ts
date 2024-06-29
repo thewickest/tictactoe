@@ -13,6 +13,8 @@ export interface Players {
   player2: Player;
 }
 
+export type status = 'ongoing' | 'draw' | 'player1_wins' | 'player2_wins';
+
 @Schema()
 export class Board {
   @Prop({ type: Object })
@@ -22,7 +24,7 @@ export class Board {
   board: string[][];
 
   @Prop()
-  status: string;
+  status: status;
 
   @Prop()
   createdAt: Date;

@@ -4,6 +4,7 @@ import { UpdateBoardDto } from './dto/update-board.dto';
 import { Board } from './schema/board.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { checkStatus } from './utils/utils.service';
 
 @Injectable()
 export class BoardService {
@@ -19,7 +20,20 @@ export class BoardService {
   }
 
   async patch(id: string, updateBoardDto: UpdateBoardDto): Promise<Board> {
-    return await this.boardModel.findOneAndUpdate({ _id: id }, updateBoardDto);
+    const currentGame = await this.boardModel.findOne({ _id: id }).lean();
+    const stat = checkStatus(
+      { ...currentGame, board: updateBoardDto.board },
+      'X',
+    );
+    return await this.boardModel.findOneAndUpdate(
+      {
+        _id: id,
+      },
+      {
+        ...updateBoardDto,
+        status: stat,
+      },
+    );
   }
 
   async findCurrentBoard(): Promise<Board> {
@@ -107,6 +121,8 @@ export class BoardService {
         }
       }
     }
+
+    currentGame.status = checkStatus(currentGame, 'O');
 
     await this.boardModel.findOneAndUpdate({ _id: id }, currentGame);
 
