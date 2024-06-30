@@ -19,6 +19,20 @@ export class BoardService {
     return createdBoard.save();
   }
 
+  async createNewBoard(): Promise<Board> {
+    const newBoard = [
+      ['', '', ''],
+      ['', '', ''],
+      ['', '', ''],
+    ];
+    const createdBoard = new this.boardModel({
+      board: newBoard,
+      createdAt: new Date(),
+      updateAt: new Date(),
+    });
+    return createdBoard.save();
+  }
+
   async patch(id: string, updateBoardDto: any): Promise<Board> {
     const currentGame = await this.boardModel.findOne({ _id: id }).lean();
     const stat = checkStatus(

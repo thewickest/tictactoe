@@ -13,6 +13,11 @@ export class BoardController {
     return this.boardService.create(createBoardDto);
   }
 
+  @Get('/new')
+  async createNewBoard(): Promise<Board> {
+    return this.boardService.createNewBoard();
+  }
+
   @Patch(':id')
   async patch(
     @Param('id') id: string,

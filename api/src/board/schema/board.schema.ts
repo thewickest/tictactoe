@@ -17,9 +17,6 @@ export type status = 'ongoing' | 'draw' | 'player1_wins' | 'player2_wins';
 
 @Schema()
 export class Board {
-  @Prop({ type: Object })
-  players: Players;
-
   @Prop()
   board: string[][];
 
