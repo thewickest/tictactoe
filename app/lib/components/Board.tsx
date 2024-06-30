@@ -21,17 +21,17 @@ export default function Board() {
   const [ isOver, setIsOver ] = useState(false);
 
   const handleClick = async (row: number, column: number) => {
-    const newBoard = board && board.board.map((r, rowIndex) =>
-      r.map((cell, colIndex) => 
-        (rowIndex === row && colIndex === column ? 'X' : cell))
-    );
-    const uptBoard = await updateBoard(board?._id, newBoard );
-    setBoard(uptBoard)
-    if(await uptBoard.status === 'ongoing') {
-      console.log('this');
-      setHasPlayed(true);
-    } else {
-      setIsOver(true);
+    if(board?.board[row][column] === '') {
+        const newBoard = board && board.board.map((r, rowIndex) =>
+          r.map((cell, colIndex) => (rowIndex === row && colIndex === column) ? 'X' : cell)
+      );
+      const uptBoard = await updateBoard(board?._id, newBoard );
+      setBoard(uptBoard)
+      if(await uptBoard.status === 'ongoing') {
+        setHasPlayed(true);
+      } else {
+        setIsOver(true);
+      }
     }
   }
 

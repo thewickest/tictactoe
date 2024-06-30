@@ -134,7 +134,7 @@ export class BoardService {
     // for the other moves, tries to win and block the other player
     else if (moves >= 3) {
       let played = false;
-      while (played) {
+      while (!played) {
         const firstIndex = Math.floor(Math.random() * 3);
         const secondIndex = Math.floor(Math.random() * 3);
         if (currentBoard[firstIndex][secondIndex] == '') {
