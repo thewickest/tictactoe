@@ -19,7 +19,7 @@ export class BoardService {
     return createdBoard.save();
   }
 
-  async patch(id: string, updateBoardDto: UpdateBoardDto): Promise<Board> {
+  async patch(id: string, updateBoardDto: any): Promise<Board> {
     const currentGame = await this.boardModel.findOne({ _id: id }).lean();
     const stat = checkStatus(
       { ...currentGame, board: updateBoardDto.board },

@@ -2,10 +2,7 @@ import { Board, status } from '../schema/board.schema';
 
 export const checkStatus = (game: Board, symbol: string): status => {
   //Check if someone has win the game
-  const {
-    board: currentBoard,
-    players: { player1 },
-  } = game;
+  const { board: currentBoard } = game;
   let stat: status = 'ongoing';
 
   //check rows
@@ -40,9 +37,7 @@ export const checkStatus = (game: Board, symbol: string): status => {
   }, 0);
 
   if (tictactoe) {
-    symbol === player1.symbol
-      ? (stat = 'player1_wins')
-      : (stat = 'player1_wins');
+    symbol === 'X' ? (stat = 'player1_wins') : (stat = 'player1_wins');
   }
   if (boxesLeft === 0) {
     stat = 'draw';
