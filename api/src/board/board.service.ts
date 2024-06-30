@@ -27,6 +27,7 @@ export class BoardService {
     ];
     const createdBoard = new this.boardModel({
       board: newBoard,
+      status: 'ongoing',
       createdAt: new Date(),
       updateAt: new Date(),
     });
