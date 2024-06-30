@@ -37,7 +37,7 @@ export const checkStatus = (game: Board, symbol: string): status => {
   }, 0);
 
   if (tictactoe) {
-    symbol === 'X' ? (stat = 'player1_wins') : (stat = 'player1_wins');
+    symbol === 'X' ? (stat = 'player1_wins') : (stat = 'player2_wins');
   }
   if (boxesLeft === 0) {
     stat = 'draw';

@@ -63,7 +63,6 @@ export class BoardService {
     //TODO: Move to other side
     // THE WIN WIN algorithm
     // first checks firsts move. If the player2 hasn't played yet, plays on a random corner
-    //count moves
     const moves = currentBoard.reduce((res, line) => {
       const prev = line.reduce((res, el) => {
         return el === 'O' ? res + 1 : res;
@@ -71,12 +70,14 @@ export class BoardService {
       return res + prev;
     }, 0);
     if (moves == 0) {
-      const firstIndex = Math.random() < 0.5 ? 0 : 2;
-      const secondIndex = Math.random() < 0.5 ? 0 : 2;
-      if (currentBoard[firstIndex][secondIndex] !== '') {
-        currentBoard[secondIndex][firstIndex] = 'O';
-      } else {
-        currentBoard[firstIndex][secondIndex] = 'O';
+      let played = false;
+      while (!played) {
+        const firstIndex = Math.random() < 0.5 ? 0 : 2;
+        const secondIndex = Math.random() < 0.5 ? 0 : 2;
+        if (currentBoard[firstIndex][secondIndex] === '') {
+          currentBoard[firstIndex][secondIndex] = 'O';
+          played = true;
+        }
       }
     }
     // for the second move, checks the previous move and plays next to it if's posible.
@@ -93,6 +94,7 @@ export class BoardService {
         })
         .filter((el) => el)[0][0];
       const { lineIndex, columnIndex } = previousMove;
+      let played = false;
       //try columns
       let nextColumn = columnIndex + 1;
       if (nextColumn == 3) {
@@ -101,38 +103,42 @@ export class BoardService {
       let nextBox = currentBoard[lineIndex][nextColumn];
       if (nextBox === '') {
         currentBoard[lineIndex][nextColumn] = 'O';
+        played = true;
       }
       //try rows
-      let nextLine = lineIndex + 1;
-      if (nextLine == 3) {
-        nextLine = lineIndex - 1;
-      }
-      nextBox = currentBoard[nextLine][columnIndex];
-      if (nextBox === '') {
-        currentBoard[nextLine][columnIndex] = 'O';
+      if (!played) {
+        let nextLine = lineIndex + 1;
+        if (nextLine == 3) {
+          nextLine = lineIndex - 1;
+        }
+        nextBox = currentBoard[nextLine][columnIndex];
+        if (nextBox === '') {
+          currentBoard[nextLine][columnIndex] = 'O';
+        }
       }
     }
     // for the third move, tries to play in any other corner.
     else if (moves === 2) {
       //plays in any other corner if possible
-      const firstIndex = Math.random() < 0.5 ? 0 : 2;
-      const secondIndex = Math.random() < 0.5 ? 0 : 2;
-      if (currentBoard[firstIndex][secondIndex] === '') {
-        currentBoard[secondIndex][firstIndex] = 'O';
-      } else {
-        currentBoard[firstIndex][secondIndex] = 'O';
+      let played = false;
+      while (!played) {
+        const firstIndex = Math.random() < 0.5 ? 0 : 2;
+        const secondIndex = Math.random() < 0.5 ? 0 : 2;
+        if (currentBoard[firstIndex][secondIndex] === '') {
+          currentBoard[firstIndex][secondIndex] = 'O';
+          played = true;
+        }
       }
     }
     // for the other moves, tries to win and block the other player
     else if (moves >= 3) {
-      //plays randomly
-      let playing = true;
-      while (playing) {
+      let played = false;
+      while (played) {
         const firstIndex = Math.floor(Math.random() * 3);
         const secondIndex = Math.floor(Math.random() * 3);
         if (currentBoard[firstIndex][secondIndex] == '') {
           currentBoard[firstIndex][secondIndex] = 'O';
-          playing = false;
+          played = true;
         }
       }
     }
