@@ -4,7 +4,7 @@
   "description": "The TicTacToe game",
   "main": "index.js",
   "scripts": {
-    "dev:start": "concurrently -n app,api \"npm:app:start\" \"npm:api:start\" \"npm:db:start\"",
+    "dev:start": "concurrently -n app,api,db \"npm:app:start\" \"npm:api:start\" \"npm:db:start\"",
     "app:start": "npm --prefix ./app run dev",
     "api:start": "npm --prefix ./api run start:dev",
     "app:install": "npm --prefix ./app install",
