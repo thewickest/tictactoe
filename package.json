@@ -4,6 +4,13 @@
   "description": "The TicTacToe game",
   "main": "index.js",
   "scripts": {
+    "dev:start": "concurrently -n app,api \"npm:app:start\" \"npm:api:start\" \"npm:db:start\"",
+    "app:start": "npm --prefix ./app run dev",
+    "api:start": "npm --prefix ./api run start:dev",
+    "app:install": "npm --prefix ./app install",
+    "api:install": "npm --prefix ./api install",
+    "db:start": "docker-compose up -d",
+    "dev:setup": "npm run app:install && npm run api:install && npm install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -22,5 +29,8 @@
   "bugs": {
     "url": "https://github.com/thewickest/tictactoe/issues"
   },
-  "homepage": "https://github.com/thewickest/tictactoe#readme"
+  "homepage": "https://github.com/thewickest/tictactoe#readme",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
 }
