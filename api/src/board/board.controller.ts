@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { UpdateBoardDto } from './dto/update-board.dto';
@@ -16,6 +16,11 @@ export class BoardController {
   @Get('/new')
   async createNewBoard(): Promise<Board> {
     return this.boardService.createNewBoard();
+  }
+
+  @Get('/stats')
+  async getStats() {
+    return this.boardService.getStats();
   }
 
   @Patch(':id')

@@ -50,6 +50,15 @@ const useBoard = () => {
     }
   }
 
+  const getStats = async () => {
+    try {
+      const res = await fetch(`${url}/board/stats`)
+      return await res.json();
+    } catch (error) {
+      console.log('An error happened!');
+    }
+  }
+
   const getNextBoard = async (id: string) => {
     try {
       const res = await fetch(`${url}/board/${id}`)
@@ -59,7 +68,7 @@ const useBoard = () => {
     }
   }
 
-  return { board, setBoard, getNewBoard, updateBoard, getNextBoard }
+  return { board, setBoard, getNewBoard, updateBoard, getNextBoard, getStats }
 }
 
 export default useBoard;

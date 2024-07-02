@@ -34,6 +34,40 @@ export class BoardService {
     return createdBoard.save();
   }
 
+  async getStats() {
+    const data = this.boardModel.aggregate([
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          status: '$_id',
+          count: 1,
+        },
+      },
+    ]);
+    const stats = {
+      player1: 0,
+      player2: 0,
+      draw: 0,
+    };
+
+    (await data).forEach((result) => {
+      if (result.status === 'player1_wins') {
+        stats.player1 = Number(result.count);
+      } else if (result.status === 'player2_wins') {
+        stats.player2 = Number(result.count);
+      } else if (result.status === 'draw') {
+        stats.draw = Number(result.count);
+      }
+    });
+    return stats;
+  }
+
   async patch(id: string, updateBoardDto: any): Promise<Board> {
     const currentGame = await this.boardModel.findOne({ _id: id }).lean();
     const stat = checkStatus(
