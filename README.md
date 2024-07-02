@@ -13,7 +13,7 @@ npm run dev:setup
 This will install all the dependencies from the two services (API and APP).
 
 ## Start
-Copy the .env.example file to .env file and write the proper variables:
+Modify the .env file and write the proper variables:
 ```
 DATABASE=mongodb
 DATABASE_USER=tbd
