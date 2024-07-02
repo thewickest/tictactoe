@@ -63,6 +63,44 @@
   background-color: #45a049;
 }
 
+/* components/StatsTable.module.css */
+
+.statsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #f0f8ff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 400px;
+}
+
+.statItem {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.statLabel {
+  font-weight: bold;
+  color: #333;
+}
+
+.statValue {
+  font-size: 1.2em;
+  color: #555;
+}
+
+
 @media (max-width: 600px) {
   .grid {
     max-width: 100%;

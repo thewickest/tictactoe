@@ -9,8 +9,9 @@
     "api:start": "npm --prefix ./api run start:dev",
     "app:install": "npm --prefix ./app install",
     "api:install": "npm --prefix ./api install",
+    "api:env:link": "cp ./.env.example ./.env && ln -sf ../.env ./api/.env",
     "db:start": "docker-compose up -d",
-    "dev:setup": "npm run app:install && npm run api:install && npm install",
+    "dev:setup": "npm run app:install && npm run api:install && npm install && npm run api:env:link",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

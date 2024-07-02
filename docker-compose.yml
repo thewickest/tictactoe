@@ -7,6 +7,8 @@ services:
     restart: always
     ports:
       - 27017:27017
+    env_file:
+     - .env
     volumes:
       - ./data/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
     environment:
@@ -18,6 +20,9 @@ services:
     restart: always
     ports:
       - 8081:8081
+    env_file:
+     - .env
+    
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${DATABASE_ROOT}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${DATABASE_ROOT_PASSWORD}

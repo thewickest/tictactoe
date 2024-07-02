@@ -10,15 +10,17 @@ type Board = {
 }
 
 export default function Board() {
-  const { board, setBoard, updateBoard, getNextBoard, getNewBoard }: 
+  const { board, setBoard, updateBoard, getNextBoard, getNewBoard, getStats }: 
   { board: Board | undefined,
     setBoard: any,
     updateBoard: any,
     getNextBoard: any,
     getNewBoard: any,
+    getStats: any,
   }= useBoard();
   const [ hasPlayed, setHasPlayed ] = useState(false);
   const [ isOver, setIsOver ] = useState(false);
+  const [ stats, setStats ] = useState(null)
 
   const handleClick = async (row: number, column: number) => {
     if(board?.board[row][column] === '') {
@@ -39,6 +41,14 @@ export default function Board() {
     const newBoard = await getNewBoard();
     setBoard(newBoard);
   }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const stats  = await getStats();
+      setStats(stats);
+    }
+    fetchData();
+  })
 
   useEffect(()=>{
     if(hasPlayed) {
@@ -82,6 +92,22 @@ export default function Board() {
         { board && board?.status === 'player1_wins' && <h2>Player 1 wins!</h2>}
         { board && board?.status === 'player2_wins' && <h2>Player 2 wins!</h2>}
       </div>)}
+      { stats && (
+        <div className={styles.statsContainer}>
+          <div className={styles.statItem}>
+            <div className={styles.statLabel}>Player 1 Wins:</div>
+            <div className={styles.statValue}>{stats.player1}</div>
+          </div>
+          <div className={styles.statItem}>
+            <div className={styles.statLabel}>Draws:</div>
+            <div className={styles.statValue}>{stats.draw}</div>
+          </div>
+          <div className={styles.statItem}>
+            <div className={styles.statLabel}>Player 2 Wins:</div>
+            <div className={styles.statValue}>{stats.player2}</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
