@@ -1,7 +1,9 @@
 # Tictactoe
 A small TicTacToe game with NextJs and NestJS.
 
-
+## Tools
+- Node.js 18
+- Npm 10
 
 ## Installation
 Clone the project and go to the root folder.
