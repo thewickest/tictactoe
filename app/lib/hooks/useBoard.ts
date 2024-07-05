@@ -6,7 +6,7 @@ export type Board = {
   status: string,
 }
 
-const url = 'http://localhost:3001'
+const url = `${process.env.API_URL}`;
 const useBoard = () => {
   const [ board, setBoard ] = useState<Board>();
   const [ gameStatus, setGameStatus ] = useState<string>();

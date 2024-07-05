@@ -48,7 +48,7 @@ export default function Board() {
       setStats(stats);
     }
     fetchData();
-  })
+  }, [])
 
   useEffect(()=>{
     if(hasPlayed) {
@@ -63,7 +63,7 @@ export default function Board() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>TicTacToe</h1>
+      <h1 className={styles.title}>TicTacToe 2</h1>
       <div className={styles.grid}>
         {board && board.board.map((row, rowIndex) =>
           row.map((cell, colIndex) => (

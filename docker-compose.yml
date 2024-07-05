@@ -2,6 +2,30 @@ version: '3.1'
 
 services:
 
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: support/app/dockerfile
+    volumes:
+      - ./app:/app
+    networks:
+      - tictactoe
+    ports:
+      - 3000:3000
+
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: support/api/dockerfile
+    volumes:
+      - ./api:/app
+    networks:
+      - tictactoe
+    ports:
+      - 3001:3001
+    
   mongo:
     image: mongo
     restart: always
@@ -28,3 +52,7 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${DATABASE_ROOT_PASSWORD}
       ME_CONFIG_MONGODB_URL: ${DATABASE}://${DATABASE_ROOT}:${DATABASE_ROOT_PASSWORD}@mongo:${DATABASE_PORT}/
       ME_CONFIG_BASICAUTH: "false"
+
+networks:
+  tictactoe:
+    driver: bridge
