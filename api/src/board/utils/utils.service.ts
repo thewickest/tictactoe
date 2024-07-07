@@ -1,5 +1,8 @@
 import { Board, status } from '../schema/board.schema';
 
+const HUMAN_PLAYER = 'O';
+const AI_PLAYER = 'X';
+
 export const checkStatus = (game: Board, symbol: string): status => {
   //Check if someone has win the game
   const { board: currentBoard } = game;
@@ -44,6 +47,66 @@ export const checkStatus = (game: Board, symbol: string): status => {
   }
 
   return stat;
+};
+
+const minmax = async (game: Board, player: string): Promise<number> => {
+  // const { board: currentBoard } = game;
+  const status = checkStatus(game, player);
+  const posibleMoves: Board[] = getPosiblesMoves(game, player);
+
+  //base
+  if (status === 'player1_wins') {
+    return -1;
+  } else if (status === 'player2_wins') {
+    return 1;
+  } else if (status === 'draw') {
+    return 0;
+  }
+
+  if (player === AI_PLAYER) {
+    let value = -1000;
+    for (const move of posibleMoves) {
+      value = Math.max(value, await minmax(move, HUMAN_PLAYER));
+    }
+    return value;
+  } else {
+    let value = 1000;
+    for (const move of posibleMoves) {
+      value = Math.min(value, await minmax(move, AI_PLAYER));
+    }
+    return value;
+  }
+};
+
+const getPosiblesMoves = (game: Board, player: string): Board[] => {
+  const posibleMoves: Board[] = [];
+  // console.log('game', game);
+  const { board: currentBoard } = game;
+  currentBoard.map((row, index) => {
+    row.map((box, column) => {
+      if (box === '') {
+        const nextGame = JSON.parse(JSON.stringify(game));
+        nextGame.board[index][column] === player;
+        posibleMoves.push(nextGame);
+      }
+    });
+  });
+  return posibleMoves;
+};
+export const calculateNextAIMove = (game: Board) => {
+  console.log('game', game);
+  const posibleMoves: Board[] = getPosiblesMoves(game, AI_PLAYER);
+  const scoredBoards = [];
+  for (const move of posibleMoves) {
+    const score = minmax(move, AI_PLAYER);
+    scoredBoards.push({ score, move });
+  }
+
+  let nextBoard = { board: {}, score: -1000 };
+  for (const sB of scoredBoards) {
+    if (sB.score > nextBoard.score) nextBoard = sB;
+  }
+  return nextBoard;
 };
 
 export const calculateNextMove = (board) => {
