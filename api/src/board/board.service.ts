@@ -96,8 +96,8 @@ export class BoardService {
     const { board: currentBoard } = currentGame;
 
     const testGame: any = JSON.parse(JSON.stringify(currentGame));
-    const nextBoard: any = calculateNextAIMove(testGame);
-    currentGame.board = calculateNextMove(currentBoard);
+    const nextBoard: any = await calculateNextAIMove(testGame);
+    currentGame.board = nextBoard.board;
 
     currentGame.status = checkStatus(currentGame, 'O');
 

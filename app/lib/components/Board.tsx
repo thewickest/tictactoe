@@ -29,11 +29,10 @@ export default function Board() {
       );
       const uptBoard = await updateBoard(board?._id, newBoard );
       setBoard(uptBoard)
-      if(await uptBoard.status === 'ongoing') {
-        setHasPlayed(true);
-      } else {
+      if(await uptBoard.status !== 'ongoing') {
         setIsOver(true);
       }
+      setHasPlayed(true);
     }
   }
 
@@ -41,6 +40,7 @@ export default function Board() {
     const newBoard = await getNewBoard();
     setBoard(newBoard);
     setIsOver(false);
+    setHasPlayed(false);
   }
 
   useEffect(() => {
@@ -56,6 +56,9 @@ export default function Board() {
       const fetchData = async () => {
         const genBoard = await getNextBoard(board?._id);
         setBoard(genBoard)
+        if(await genBoard.status !== 'ongoing') {
+          setIsOver(true);
+        }
         setHasPlayed(false);
       }
       fetchData();

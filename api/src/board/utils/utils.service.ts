@@ -1,7 +1,7 @@
 import { Board, status } from '../schema/board.schema';
 
-const HUMAN_PLAYER = 'O';
-const AI_PLAYER = 'X';
+const HUMAN_PLAYER = 'X';
+const AI_PLAYER = 'O';
 
 export const checkStatus = (game: Board, symbol: string): status => {
   //Check if someone has win the game
@@ -40,7 +40,7 @@ export const checkStatus = (game: Board, symbol: string): status => {
   }, 0);
 
   if (tictactoe) {
-    symbol === 'X' ? (stat = 'player1_wins') : (stat = 'player2_wins');
+    symbol === HUMAN_PLAYER ? (stat = 'player1_wins') : (stat = 'player2_wins');
   }
   if (boxesLeft === 0 && !tictactoe) {
     stat = 'draw';
@@ -86,27 +86,29 @@ const getPosiblesMoves = (game: Board, player: string): Board[] => {
     row.map((box, column) => {
       if (box === '') {
         const nextGame = JSON.parse(JSON.stringify(game));
-        nextGame.board[index][column] === player;
+        nextGame.board[index][column] = player;
         posibleMoves.push(nextGame);
       }
     });
   });
   return posibleMoves;
 };
-export const calculateNextAIMove = (game: Board) => {
-  console.log('game', game);
+export const calculateNextAIMove = async (game: Board) => {
   const posibleMoves: Board[] = getPosiblesMoves(game, AI_PLAYER);
+
+  if (posibleMoves.length === 0) return game;
+
   const scoredBoards = [];
   for (const move of posibleMoves) {
-    const score = minmax(move, AI_PLAYER);
-    scoredBoards.push({ score, move });
+    const score = await minmax(move, HUMAN_PLAYER);
+    scoredBoards.push({ score, game: move });
   }
 
-  let nextBoard = { board: {}, score: -1000 };
+  let nextBoard = { game: {}, score: -1000 };
   for (const sB of scoredBoards) {
     if (sB.score > nextBoard.score) nextBoard = sB;
   }
-  return nextBoard;
+  return nextBoard.game;
 };
 
 export const calculateNextMove = (board) => {
@@ -116,7 +118,7 @@ export const calculateNextMove = (board) => {
   // first checks firsts move. If the player2 hasn't played yet, plays on a random corner
   const moves = currentBoard.reduce((res, line) => {
     const prev = line.reduce((res, el) => {
-      return el === 'O' ? res + 1 : res;
+      return el === AI_PLAYER ? res + 1 : res;
     }, 0);
     return res + prev;
   }, 0);
@@ -126,7 +128,7 @@ export const calculateNextMove = (board) => {
       const firstIndex = Math.random() < 0.5 ? 0 : 2;
       const secondIndex = Math.random() < 0.5 ? 0 : 2;
       if (currentBoard[firstIndex][secondIndex] === '') {
-        currentBoard[firstIndex][secondIndex] = 'O';
+        currentBoard[firstIndex][secondIndex] = AI_PLAYER;
         played = true;
       }
     }
@@ -135,10 +137,10 @@ export const calculateNextMove = (board) => {
   else if (moves == 1) {
     const previousMove = currentBoard
       .map((line, lineIndex) => {
-        if (line.concat().includes('O')) {
+        if (line.concat().includes(AI_PLAYER)) {
           return line
             .map((box, columnIndex) => {
-              if (box === 'O') return { lineIndex, columnIndex };
+              if (box === AI_PLAYER) return { lineIndex, columnIndex };
             })
             .filter((el) => el);
         }
@@ -153,7 +155,7 @@ export const calculateNextMove = (board) => {
     }
     let nextBox = currentBoard[lineIndex][nextColumn];
     if (nextBox === '') {
-      currentBoard[lineIndex][nextColumn] = 'O';
+      currentBoard[lineIndex][nextColumn] = AI_PLAYER;
       played = true;
     }
     //try rows
@@ -164,7 +166,7 @@ export const calculateNextMove = (board) => {
       }
       nextBox = currentBoard[nextLine][columnIndex];
       if (nextBox === '') {
-        currentBoard[nextLine][columnIndex] = 'O';
+        currentBoard[nextLine][columnIndex] = AI_PLAYER;
       }
     }
   }
@@ -176,7 +178,7 @@ export const calculateNextMove = (board) => {
       const firstIndex = Math.random() < 0.5 ? 0 : 2;
       const secondIndex = Math.random() < 0.5 ? 0 : 2;
       if (currentBoard[firstIndex][secondIndex] === '') {
-        currentBoard[firstIndex][secondIndex] = 'O';
+        currentBoard[firstIndex][secondIndex] = AI_PLAYER;
         played = true;
       }
     }
@@ -188,7 +190,7 @@ export const calculateNextMove = (board) => {
       const firstIndex = Math.floor(Math.random() * 3);
       const secondIndex = Math.floor(Math.random() * 3);
       if (currentBoard[firstIndex][secondIndex] == '') {
-        currentBoard[firstIndex][secondIndex] = 'O';
+        currentBoard[firstIndex][secondIndex] = AI_PLAYER;
         played = true;
       }
     }
