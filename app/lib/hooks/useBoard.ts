@@ -6,11 +6,11 @@ export type Board = {
   status: string,
 }
 
-const url = `${process.env.API_URL}`;
+const url = `${process.env.NEXT_PUBLIC_API_URL}`;
 const useBoard = () => {
   const [ board, setBoard ] = useState<Board>();
   const [ gameStatus, setGameStatus ] = useState<string>();
-
+  
   useEffect(() => {
     const fetchGameStatus = async () => {
       try {

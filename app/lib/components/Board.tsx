@@ -40,6 +40,7 @@ export default function Board() {
   const handleNewGame = async () => {
     const newBoard = await getNewBoard();
     setBoard(newBoard);
+    setIsOver(false);
   }
 
   useEffect(() => {
@@ -48,7 +49,7 @@ export default function Board() {
       setStats(stats);
     }
     fetchData();
-  }, [])
+  }, [isOver])
 
   useEffect(()=>{
     if(hasPlayed) {
