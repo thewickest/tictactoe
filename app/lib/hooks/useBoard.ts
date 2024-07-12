@@ -6,11 +6,11 @@ export type Board = {
   status: string,
 }
 
-const url = 'http://localhost:3001'
+const url = `${process.env.NEXT_PUBLIC_API_URL}`;
 const useBoard = () => {
   const [ board, setBoard ] = useState<Board>();
   const [ gameStatus, setGameStatus ] = useState<string>();
-
+  
   useEffect(() => {
     const fetchGameStatus = async () => {
       try {
@@ -20,6 +20,7 @@ const useBoard = () => {
         setBoard(data);
       } catch (err) {
         console.log('Some error happened!');
+        return null;
       }
     };
 
@@ -38,6 +39,7 @@ const useBoard = () => {
       return await res.json();
     } catch (error) {
       console.log('An error happened!');
+      return null;
     }
   }
 
@@ -47,6 +49,7 @@ const useBoard = () => {
       return await res.json();
     } catch (error) {
       console.log('An error happened!');
+      return null;
     }
   }
 
@@ -56,6 +59,7 @@ const useBoard = () => {
       return await res.json();
     } catch (error) {
       console.log('An error happened!');
+      return null;
     }
   }
 
@@ -65,6 +69,7 @@ const useBoard = () => {
       return await res.json();
     } catch (error) {
       console.log('An error happened!');
+      return null;
     }
   }
 

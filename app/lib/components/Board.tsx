@@ -29,17 +29,18 @@ export default function Board() {
       );
       const uptBoard = await updateBoard(board?._id, newBoard );
       setBoard(uptBoard)
-      if(await uptBoard.status === 'ongoing') {
-        setHasPlayed(true);
-      } else {
+      if(await uptBoard.status !== 'ongoing') {
         setIsOver(true);
       }
+      setHasPlayed(true);
     }
   }
 
   const handleNewGame = async () => {
     const newBoard = await getNewBoard();
     setBoard(newBoard);
+    setIsOver(false);
+    setHasPlayed(false);
   }
 
   useEffect(() => {
@@ -48,13 +49,16 @@ export default function Board() {
       setStats(stats);
     }
     fetchData();
-  })
+  }, [isOver])
 
   useEffect(()=>{
     if(hasPlayed) {
       const fetchData = async () => {
         const genBoard = await getNextBoard(board?._id);
         setBoard(genBoard)
+        if(await genBoard.status !== 'ongoing') {
+          setIsOver(true);
+        }
         setHasPlayed(false);
       }
       fetchData();
@@ -63,7 +67,7 @@ export default function Board() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>TicTacToe</h1>
+      <h1 className={styles.title}>TicTacToe 2</h1>
       <div className={styles.grid}>
         {board && board.board.map((row, rowIndex) =>
           row.map((cell, colIndex) => (
