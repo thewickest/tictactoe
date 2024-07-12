@@ -20,6 +20,7 @@ const useBoard = () => {
         setBoard(data);
       } catch (err) {
         console.log('Some error happened!');
+        return null;
       }
     };
 
@@ -38,6 +39,7 @@ const useBoard = () => {
       return await res.json();
     } catch (error) {
       console.log('An error happened!');
+      return null;
     }
   }
 
@@ -47,6 +49,7 @@ const useBoard = () => {
       return await res.json();
     } catch (error) {
       console.log('An error happened!');
+      return null;
     }
   }
 
@@ -56,6 +59,7 @@ const useBoard = () => {
       return await res.json();
     } catch (error) {
       console.log('An error happened!');
+      return null;
     }
   }
 
@@ -65,6 +69,7 @@ const useBoard = () => {
       return await res.json();
     } catch (error) {
       console.log('An error happened!');
+      return null;
     }
   }
 
