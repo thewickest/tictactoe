@@ -3,7 +3,7 @@ import { CreateBoardDto } from './dto/create-board.dto';
 import { Board } from './schema/board.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { checkStatus, calculateNextMove } from './utils/utils.service';
+import { checkStatus, calculateNextMove, calculateNextAIMove } from './utils/utils.service';
 
 @Injectable()
 export class BoardService {
@@ -95,7 +95,9 @@ export class BoardService {
     });
     const { board: currentBoard } = currentGame;
 
-    currentGame.board = calculateNextMove(currentBoard);
+    const testGame: any = JSON.parse(JSON.stringify(currentGame));
+    const nextBoard: any = await calculateNextAIMove(testGame);
+    currentGame.board = nextBoard.board;
 
     currentGame.status = checkStatus(currentGame, 'O');
 
