@@ -20,10 +20,20 @@ export default function Board() {
   }= useBoard();
   const [ hasPlayed, setHasPlayed ] = useState(false);
   const [ isOver, setIsOver ] = useState(false);
-  const [ stats, setStats ] = useState(null)
+  const [ stats, setStats ] = useState(null);
+  const [ isAppBlocked, setIsAppBlocked ] = useState(false);
+
+  const blockApp = () => {
+    setIsAppBlocked(true);
+  }
+
+  const unblockApp = () => {
+    setIsAppBlocked(false);
+  }
 
   const handleClick = async (row: number, column: number) => {
-    if(board?.board[row][column] === '') {
+    blockApp();
+    if(board?.board[row][column] === '' && !isAppBlocked) {
         const newBoard = board && board.board.map((r, rowIndex) =>
           r.map((cell, colIndex) => (rowIndex === row && colIndex === column) ? 'X' : cell)
       );
@@ -41,6 +51,7 @@ export default function Board() {
     setBoard(newBoard);
     setIsOver(false);
     setHasPlayed(false);
+    unblockApp();
   }
 
   useEffect(() => {
@@ -52,7 +63,7 @@ export default function Board() {
   }, [isOver])
 
   useEffect(()=>{
-    if(hasPlayed) {
+    if(hasPlayed && !isOver) {
       const fetchData = async () => {
         const genBoard = await getNextBoard(board?._id);
         setBoard(genBoard)
@@ -61,17 +72,18 @@ export default function Board() {
         }
         setHasPlayed(false);
       }
-      fetchData();
+      fetchData().then(() => unblockApp())
     }
   }, [hasPlayed])
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>TicTacToe 2</h1>
+      <h1 className={styles.title}>TicTacToe</h1>
       <div className={styles.grid}>
-        {board && board.board.map((row, rowIndex) =>
+        {board && board.board?.map((row, rowIndex) =>
           row.map((cell, colIndex) => (
             <div
+              className={`${isAppBlocked ? '' : styles.cell}`}
               key={`${rowIndex}-${colIndex}`}
               onClick={() => handleClick(rowIndex, colIndex)}
               style={{
